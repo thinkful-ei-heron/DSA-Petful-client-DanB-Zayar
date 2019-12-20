@@ -7,10 +7,12 @@ import Queue from './components/Queue'
 
 export default class App extends Component {
   state = {
-
-    petsQueue: new Queue(),
+    countdown: 3,
+    loaded: false,
+    catsList: [],
+    dogsList: [],
+    petsQueue: null,
     petsInQueue: 0,
-    userQueue: new Queue(),
     usersInQueue: 0,
     myQueuePosition: null,
     petsList: [],
@@ -28,53 +30,106 @@ export default class App extends Component {
     message: null,
 
   }
-  catsList = []
-  dogsList = []
 
+
+
+  fetchData() {
+    let cats = []
+    let dogs = []
+    fetch(`http://localhost:8080/api/cats`, {
+      method: 'GET',
+    })
+      .then(resp => resp.json())
+      .then(catData=>cats = catData)
+      .then(() => {
+        return fetch(`http://localhost:8080/api/dogs`, {
+          method: 'GET',
+        })
+      })
+      .then(resp => resp.json())
+      .then(dogData => dogs = dogData)
+      .then(() => {
+        this.setState({
+          loaded: true,
+          catsList: cats,
+          dogsList: dogs,
+        }, () => {
+            this.createQueue()
+            this.createUserQueue()
+        })
+      })
+
+  }
 
   createQueue = () => {
     //create queue from randomly selecting a dog or a cat from list
-    for (let i = 0; i < 5; i++){
+    let petsList = []
+    for (let i = 0; i < 3; i++){
       let catOrDog = Math.floor(Math.random() * 1)
       if (catOrDog === 0) {
-        this.addPetToQueue(this.dogsList[i])
+        petsList.push(this.state.dogsList[i])
       } else {
-        this.addPetToQueue(this.catsList[i])
+        petsList.push(this.state.catsList[i])
       }
     }
+    this.addPetsToQueue(petsList)
   }
 
-  addPetToQueue = (pet) => {
-    //adds random cat or dog to queue
-    this.state.petsQueue.enqueue(pet)
+  addPetsToQueue = (petsList) => {
+    let newPetsQueue = new Queue()
+    petsList.forEach(pet => {
+      newPetsQueue.enqueue(pet)
+    })
     this.setState({
-      petsInQueue: this.state.petsInQueue + 1,
-      petsList: [...this.state.petsList, pet]
+      petsInQueue: petsList.length,
+      petsQueue: newPetsQueue,
+      petsList: [...petsList]
     })
   }
 
   createUserQueue = () => {
+    let userList = []
     for (let i = 0; i < 5; i++) {
-        this.addUserToQueue(this.usersList[i])
-      }
+      userList.push(this.state.usersList[i])
+    }
+    this.addUsersToQueue(userList)
   }
 
-  addUserToQueue = (user) => {
+  addUsersToQueue = (userList) => {
     //adds a user to peopleList
-    this.state.userQueue.enqueue(user)
+    let newUsersQueue = new Queue()
+    userList.forEach(user => {
+      newUsersQueue.enqueue(user)
+    })
     this.setState({
-      usersInQueue: this.state.usersInQueue + 1,
-      usersList: [...this.state.usersList, user]
+      usersInQueue: userList.length,
+      userQueue: newUsersQueue,
+      usersList: [...userList]
+    }, () => {
+        setInterval(() => {
+          if (this.state.countdown <= 0) {
+            this.matchPeopleToPet()
+            this.setState({ countdown: 3 })
+          } else {
+            this.setState({ countdown: this.state.countdown - 1 })
+          }
+        }, 1000)
     })
   }
 
   matchPeopleToPet = (e) => {
     //dequeue from petsList
+    let justAdopted = null
     if (this.state.petsQueue.first && this.state.userQueue.first) {
-      if (!this.state.myQueuePosition === 1) {
-        let justAdopted = {
-          person: this.state.userQueue.dequeue(),
-          pet: this.state.petsQueue.dequeue(),
+      console.log('matching')
+
+      let value = this.state.userQueue.dequeue
+      let person = value.data
+      console.log(person)
+        let pet = this.state.petsQueue.dequeue()
+        justAdopted = {
+          person,
+          pet
         }
 
         let petIndex = this.state.petsList.findIndex(pet => pet.name === justAdopted.pet.name)
@@ -89,17 +144,19 @@ export default class App extends Component {
           petsInQueue: this.state.petsInQueue - 1,
           petsList: newPets,
           usersList: newUsers,
-        }, () => {
-            if (this.state.myQueuePosition > 1)
-            this.setState({
-              myQueuePosition: this.state.myQueuePosition - 1,
-            }, () => {
-                setTimeout(this.matchPeopleToPet, 3000)
-            })
         })
-      }
+
     }
   }
+
+//   () => {
+//   if (this.state.myQueuePosition > 1)
+//     this.setState({
+//       myQueuePosition: this.state.myQueuePosition - 1,
+//     }, () => {
+//       setTimeout(this.matchPeopleToPet, 3000)
+//     })
+// }
 
   getinQueueClick = (e) => {
     e.preventDefault();
@@ -107,7 +164,7 @@ export default class App extends Component {
       message: 'You are now in the queue',
       myQueuePosition: this.state.usersInQueue + 1,
     }, () => {
-        this.addUserToQueue({ name: 'You' })
+        this.addUsersToQueue([...this.state.usersList, {name: 'You'}])
     })
   }
 
@@ -123,7 +180,9 @@ export default class App extends Component {
     //api call to get a pet or multiple pets and add them to the list
     //create a list of people
     //start a timer that matches pets and people
+   this.fetchData()
 
+    // this.createUserQueue()
   }
 
   render() {
