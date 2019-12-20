@@ -89,7 +89,7 @@ export default class App extends Component {
 
   createUserQueue = () => {
     let userList = []
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 2; i++) {
       userList.push(this.state.usersList[i])
     }
     this.addUsersToQueue(userList)
@@ -107,7 +107,7 @@ export default class App extends Component {
       usersList: [...userList]
     }, () => {
         setInterval(() => {
-          if (this.state.countdown <= 0) {
+          if (this.state.countdown < 0) {
             this.matchPeopleToPet()
             this.setState({ countdown: 3 })
           } else {
@@ -119,44 +119,46 @@ export default class App extends Component {
 
   matchPeopleToPet = (e) => {
     //dequeue from petsList
-    let justAdopted = null
-    if (this.state.petsQueue.first && this.state.userQueue.first) {
-      console.log('matching')
+    if (this.state.myQueuePosition === 1) {
+      return
+    } else {
+      if (this.state.petsQueue.first && this.state.userQueue.first) {
+        console.log('matching')
 
-      let value = this.state.userQueue.dequeue
-      let person = value.data
-      console.log(person)
-        let pet = this.state.petsQueue.dequeue()
-        justAdopted = {
-          person,
-          pet
+        let justAdopted = {
+          person: this.state.userQueue.first,
+          pet: this.state.petsQueue.first
         }
+        this.state.userQueue.dequeue()
+        this.state.petsQueue.dequeue()
 
         let petIndex = this.state.petsList.findIndex(pet => pet.name === justAdopted.pet.name)
-        let newPets = this.state.petsList.slice(petIndex, 1)
+        let newPets = this.state.petsList
+        newPets.shift()
 
-        let userIndex = this.state.usersList.findIndex(user => user === justAdopted.person)
-        let newUsers = this.state.usersList.slice(userIndex, 1)
+        let userIndex = this.state.usersList.findIndex(user => user === justAdopted.person.name)
+        let newUsers = this.state.usersList
+        newUsers.shift()
 
         this.setState({
           justAdopted,
           usersInQueue: this.state.usersInQueue - 1,
           petsInQueue: this.state.petsInQueue - 1,
-          petsList: newPets,
-          usersList: newUsers,
+          petsList: [...newPets],
+          usersList: [...newUsers],
+        }, () => {
+          if (this.state.myQueuePosition > 1)
+            this.setState({
+              myQueuePosition: this.state.myQueuePosition - 1,
+            })
         })
 
+      }
     }
+
   }
 
-//   () => {
-//   if (this.state.myQueuePosition > 1)
-//     this.setState({
-//       myQueuePosition: this.state.myQueuePosition - 1,
-//     }, () => {
-//       setTimeout(this.matchPeopleToPet, 3000)
-//     })
-// }
+
 
   getinQueueClick = (e) => {
     e.preventDefault();
@@ -195,7 +197,7 @@ export default class App extends Component {
         <main className="main">
           {this.state.justAdopted &&
             <p>{
-              `${this.state.justAdopted.person.name} has just adopted ${this.state.justAdopted.pet.name}!!`
+              `${this.state.justAdopted.person.data.name} has just adopted ${this.state.justAdopted.pet.data.name}!!`
             }
             </p>}
           <section className="queues">
@@ -207,7 +209,10 @@ export default class App extends Component {
             {this.state.myQueuePosition === 1 &&
               <button onClick={this.adoptClick}>It's your turn to adopt!</button>
             }
-            <button onClick={this.getinQueueClick}>Get in line to adopt!</button>
+            {!this.state.myQueuePosition &&
+              <button onClick={this.getinQueueClick}>Get in line to adopt!</button>
+            }
+
           </form>
 
 
