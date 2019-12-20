@@ -12,7 +12,7 @@ export default class PetList extends Component {
     if (this.props.petsList.length > 0) {
       return (
         <div className="petsList">
-          {this.props.petsList.map(pet, idx => {
+          {this.props.petsList.map((pet, idx) => {
             return (<Pet key={idx} id={`pet-${idx}`} petInfo={pet} />)
           })}
 

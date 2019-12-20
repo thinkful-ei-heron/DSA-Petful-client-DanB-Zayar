@@ -1,7 +1,7 @@
 {
   "version": 2,
-  "alias": "starwars-zayar",
-  "name": "starwars-zayar",
+  "alias": "",
+  "name": "",
   "routes": [
     {
       "src": "^/static/(.*)",

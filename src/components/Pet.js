@@ -24,7 +24,7 @@ export default class Pet extends Component {
                   <li>
                     <code>
                       <b>{`${key}`}</b>
-                      {`: ${this.props.item[key]}`}
+                      {`: ${this.props.petInfo[key]}`}
                     </code>
                   </li>
                 )

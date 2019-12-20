@@ -4,7 +4,7 @@ const DataContext = React.createContext()
 
 export default DataContext
 
-export class DataContext extends Component {
+export class DataContextProvider extends Component {
   state = {
     pets: [],
     people: [],

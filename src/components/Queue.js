@@ -11,19 +11,6 @@ export default class Queue {
     this.last = null;
   }
 
-  display() {
-    if (!this.first) return
-    let currItem = this.first
-    let nextItem = currItem.next
-    let output = [currItem.data]
-    while (currItem.next !== null) {
-      prevItem = currItem
-      currItem = nextItem
-      nextItem = nextItem.next
-      output.push(currItem.data)
-    }
-    return output
-  }
 
   enqueue(data) {
     const node = new _Node(data);
