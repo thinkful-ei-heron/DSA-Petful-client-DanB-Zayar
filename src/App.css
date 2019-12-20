@@ -1,0 +1,21 @@
+
+header {
+  width: 60%;
+  margin-left:auto;
+  margin-right: auto;
+  text-align: center;
+}
+main {
+  width: 60%;
+  margin-left: auto;
+  margin-right:auto;
+}
+
+.binary-linear-search-form {
+  text-align: center;
+  padding: 10px;
+}
+
+button {
+  margin: 10px;
+}
