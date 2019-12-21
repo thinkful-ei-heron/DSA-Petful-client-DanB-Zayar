@@ -3,6 +3,7 @@ import './App.css';
 import PetList from './components/PetList'
 import UserList from './components/UserList'
 import Queue from './components/Queue'
+import {API_ENDPOINT} from './config'
 
 
 export default class App extends Component {
@@ -28,13 +29,13 @@ export default class App extends Component {
   fetchData() {
     let cats = []
     let dogs = []
-    fetch(`http://localhost:8080/api/cats`, {
+    fetch(`${API_ENDPOINT}/api/cats`, {
       method: 'GET',
     })
       .then(resp => resp.json())
       .then(catData=>cats = catData)
       .then(() => {
-        return fetch(`http://localhost:8080/api/dogs`, {
+        return fetch(`${API_ENDPOINT}/api/dogs`, {
           method: 'GET',
         })
       })
