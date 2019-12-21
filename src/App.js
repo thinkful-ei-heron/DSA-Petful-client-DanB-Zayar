@@ -1,9 +1,9 @@
+import config from './config'
 import React, { Component } from 'react'
 import './App.css';
 import PetList from './components/PetList'
 import UserList from './components/UserList'
 import Queue from './components/Queue'
-import {API_ENDPOINT} from './config'
 
 
 export default class App extends Component {
@@ -29,13 +29,13 @@ export default class App extends Component {
   fetchData() {
     let cats = []
     let dogs = []
-    fetch(`${API_ENDPOINT}/api/cats`, {
+    fetch(`${config.API_ENDPOINT}/api/cats`, {
       method: 'GET',
     })
       .then(resp => resp.json())
       .then(catData=>cats = catData)
       .then(() => {
-        return fetch(`${API_ENDPOINT}/api/dogs`, {
+        return fetch(`${config.API_ENDPOINT}/api/dogs`, {
           method: 'GET',
         })
       })
