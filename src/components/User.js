@@ -15,7 +15,7 @@ export default class User extends Component {
           {
             Object.keys(this.props.userInfo).map((key, idx) => {
               return (
-                <li>
+                <li key={idx}>
                   <code>
                     <b>{`${key}`}</b>
                     {`: ${this.props.userInfo[key]}`}

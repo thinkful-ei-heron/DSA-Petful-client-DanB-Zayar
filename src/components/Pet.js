@@ -15,23 +15,15 @@ export default class Pet extends Component {
   }
 
   render() {
+    const { name, imageURL, imageDescription, sex, age, breed, story } = this.props.petInfo
     return (
       <div className="pet">
-        <ul>
-          {
-            Object.keys(this.props.petInfo).map((key, idx) => {
-                return (
-                  <li>
-                    <code>
-                      <b>{`${key}`}</b>
-                      {`: ${this.props.petInfo[key]}`}
-                    </code>
-                  </li>
-                )
-            })
-          }
-        </ul>
-
+        <span>Name: {name}</span>
+        <span>Breed: {breed}</span>
+        <span>Age: {age}</span>
+        <span>Sex: {sex}</span>
+        <img className="image" src={imageURL} alt={imageDescription}/>
+        <p>Story: {story}</p>
       </div>
     )
   }

@@ -13,7 +13,16 @@ export default class PetList extends Component {
       return (
         <div className="petsList">
           {this.props.petsList.map((pet, idx) => {
-            return (<Pet key={idx} id={`pet-${idx}`} petInfo={pet} />)
+            return (
+              <>
+                {(idx === 0) &&
+                  <Pet key={idx} id={`pet-${idx}`} petInfo={pet} />
+                }
+                {(idx !== 0) &&
+                  <Pet key={idx} id={`pet-${idx}`} petInfo={pet} />
+                }
+              </>
+            )
           })}
 
         </div>

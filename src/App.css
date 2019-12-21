@@ -14,3 +14,8 @@ main {
 button {
   margin: 10px;
 }
+
+.queues {
+  display: flex;
+  flex-direction: row;
+}

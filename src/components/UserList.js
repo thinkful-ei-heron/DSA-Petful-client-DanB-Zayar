@@ -13,7 +13,7 @@ export default class UserList extends Component {
       return (
         <div className="usersList">
           {this.props.usersList.map((user, idx) => {
-            return (<User key={idx} id={`user-${idx}`} userInfo={user} />)
+            return (<User key={user.name+idx} id={`user-${idx}`} userInfo={user} />)
           })}
 
         </div>

@@ -1,0 +1,8 @@
+.pet {
+  display: flex;
+  flex-direction: column;
+}
+
+.pet img {
+  max-width: 250px;
+}
