@@ -32,15 +32,5 @@
   },
   "main": "index.js",
   "devDependencies": {},
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/thinkful-ei-heron/DSA-Petful-client-DanB-Zayar.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/thinkful-ei-heron/DSA-Petful-client-DanB-Zayar/issues"
-  },
-  "homepage": "https://github.com/thinkful-ei-heron/DSA-Petful-client-DanB-Zayar#readme",
   "description": ""
 }

@@ -4,23 +4,14 @@
   "alias": "Petful-Dan-Zayar",
   "routes": [
     {
+      "handle": "filesystem"
+    },
+    {
       "src": "^/static/(.*)",
       "dest": "/static/$1"
     },
     {
-      "src": "^/favicon.ico$",
-      "dest": "/favicon.ico"
-    },
-    {
-      "src": "^/manifest.json$",
-      "dest": "/manifest.json"
-    },
-    {
-      "src": "^/site.webmanifest.json$",
-      "dest": "/site.webmanifest.json"
-    },
-    {
-      "src": ".*",
+      "src": "/.*",
       "dest": "/index.html"
     }
   ]
